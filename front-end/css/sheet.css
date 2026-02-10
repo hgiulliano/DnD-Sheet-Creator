@@ -13,6 +13,7 @@ body {
     padding: 0;
     overflow: hidden;
 }
+
 .central {
     display: flex;
     opacity: 70%;
@@ -20,16 +21,19 @@ body {
     align-items: center;
     width: 500px;
     height: 600px;
-    background-color: #2d2d2d;;
+    background-color: #2d2d2d;
+    ;
     color: #d4af37;
     border: 2px solid #d4af37;
     border-radius: 5%;
 }
-.lead{
+
+.lead {
     color: #e0e0e0;
     margin-top: -20px
 }
-.sheet{
+
+.sheet {
     text-align: right;
     text-transform: capitalize;
 }
