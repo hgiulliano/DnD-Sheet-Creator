@@ -1,4 +1,8 @@
-const {Client} = require('pg')
+const express = require('express')//import express
+const cors = require('cors')//import cors
+const {Client} = require('pg')//from pg import client
+const util = require('util')
+const fs = require('fs')
 
 const client = new Client({
     user:'cleric',
@@ -8,12 +12,11 @@ const client = new Client({
     database:'postgres',
 })
 
-
 client.connect()
-const express = require('express')
 const app = express()
 const port = 3000
 
+app.use(cors("*"))
 app.use(express.json())
 
 app.get('/:id', async (req, res) => {
@@ -23,12 +26,15 @@ app.get('/:id', async (req, res) => {
   
 })
 app.post('/sheets', (req, res) => {
+  // fs.writeFileSync("req.txt",util.inspect(req))
   console.log(req.body)
   console.log(req.body.name)
   console.log(req.body.hp)
   console.log(req.body.ac)
   console.log(req.body.speed)
-  res.send('Character Sheets2')
+  res.send({
+    value : req.body.ac + req.body.hp
+  })
 })
 
 app.listen(port, () => {
