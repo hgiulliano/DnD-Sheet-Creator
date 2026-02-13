@@ -1,4 +1,4 @@
-# 🛡️ D&D Sheets Creator
+# 🛡️ D&D Sheet Creator
 
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Active%20Development-green?style=for-the-badge" alt="Status">
@@ -18,29 +18,36 @@ This project is **hand-coded**. While I use AI for consulting, documentation, an
 ## ⚔️ Current Features
 
 In this current build, users can:
-* **Custom Stats:** Input and track core attributes like Ability Scores, AC, and HP.
+* **Custom Stats:** Input core attributes like Ability Scores, AC, and HP.
 * **Character Creation:** Choose from various D&D classes and species.
-* **Data Persistence:** Save your completed sheet directly to a database for later sessions.
+* **Data Persistence:** Save your completed sheet to a PostgreSQL database.
+* **Containerized Environment:** Ready for local development using Docker.
 
 ---
 
 ## 🛠️ Tech Stack
 
-### **Frontend**
+### **Frontend & Backend**
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black)
-
-### **Backend & Database**
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
-![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+
+### **Database & Infrastructure**
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
 ---
 
 ## 📂 Project Structure
 ```text
-├── public/          # HTML and CSS files
-├── src/             # Frontend JavaScript logic
-├── server.js        # Node.js/Express server
-└── database/        # SQL scripts for PostgreSQL
+├── back-end/
+│   ├── database/    # init.sql, queries.sql, seed.sql
+│   ├── index.js     # Server entry point
+│   └── docker-compose.yaml
+└── front-end/
+    ├── assets/      # Icons and images
+    ├── css/         # Stylesheets
+    ├── pages/       # sheet.html
+    ├── src/         # Frontend JS logic
+    └── index.html   # Main landing page
