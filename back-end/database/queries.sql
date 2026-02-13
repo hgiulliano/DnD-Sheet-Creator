@@ -19,3 +19,6 @@ delete from stats where id = '019b2d08-9a00-7c51-899d-71c0d5d871c5';
 commit;
 
 select * from sheets where level >= 6 order by level desc limit 100;
+
+/*HOW TO FIND STATS ON INTERCECTIONS*/
+select * from sheets sh join stats st on st.id=sh.stats_id where sh.id='019c3e7d-b34c-7a49-86da-6a52fe58e581';

@@ -1,7 +1,7 @@
 CREATE TYPE characters_class AS ENUM ('wizard','warlock','sorcerer','rogue','warrior','druid');
 CREATE TYPE species AS ENUM ('human','elf','dwarf','drow');
 CREATE TABLE stats (
-    id UUID PRIMARY KEY DEFAULT uuidv7(),
+    id UUID PRIMARY KEY DEFAULT uuidv7(), /*PRIMARY KEY -> CANT REPEAT*/
     strength smallint DEFAULT 8,
     dexterity smallint DEFAULT 8,
     constitution smallint DEFAULT 8,
@@ -16,7 +16,8 @@ CREATE TABLE sheets (
     class characters_class NOT NULL,
     level smallint DEFAULT 1,
     armor smallint DEFAULT 10,
-    speed smallint DEFAULT 30, 
+    speed smallint DEFAULT 30,
+    hp smallint DEFAULT 35,
     stats_id UUID NOT NULL,
     FOREIGN KEY(stats_id) REFERENCES stats(id)
 );

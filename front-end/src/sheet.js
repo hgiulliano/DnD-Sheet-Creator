@@ -1,4 +1,4 @@
-const jsonToSheet = localStorage.getItem("charSheet")
+const jsonToSheet = localStorage.getItem("charSheetFe")
 const sheet = JSON.parse(jsonToSheet)
 console.log('Sheet : ', sheet)
 //if i need to access a value i can use .value like sheet.name this will be == "name".
@@ -18,5 +18,5 @@ else {
 }
 
 charName.innerHTML = sheet.name
-charProps.innerHTML = `${sheet.charclass} | Level: ${sheet.level} <br>
- Hit Points : ${sheet.hp} | Armor Class : ${sheet.ac}`
+charProps.innerHTML = `${sheet.charclass} | ${sheet.charspecie} | Level: ${sheet.level} <br>
+ Hit Points : ${sheet.hp} | Armor Class : ${sheet.ac} | Speed : ${sheet.speed}ft`
