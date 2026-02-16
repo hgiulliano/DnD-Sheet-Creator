@@ -19,7 +19,7 @@ app.use(express.json()) // transforms the text to an json object, so we can acce
 
 
 //i've created an endpoint, so i can access it on my localhost:3000
-app.get('/sheets', async (req, res) => { 
+app.get('/api/sheets', async (req, res) => { 
   const allSheets = await client.query(`select * from public.sheets`)
   res.send(allSheets.rows)
 })
@@ -28,7 +28,7 @@ app.get('/sheets', async (req, res) => {
 //query goes on the ?
 
 //req.body -> what the front sends to the back-end 
-app.post('/sheets', async (req, res) => { // creating our endpoint
+app.post('/api/sheets', async (req, res) => { // creating our endpoint
   const id_stats = (await client.query(`
     INSERT INTO stats ("strength","dexterity","constitution","intelligence","wisdom","charisma")
     values (15,14,13,12,10,8) returning id`)).rows[0].id //sheets doesn't accept null values on the column stats_id, so we need to define our stats table values
@@ -46,7 +46,7 @@ app.post('/sheets', async (req, res) => { // creating our endpoint
     //the $ avoids every special character so its impossible to sql injection.
 
   const completeSheet = (await client.query(`
-    SELECT * FROM sheets sh join stats st on sh.stats_id=st.id where st.id='${id_stats}' 
+    SELECT sh.id as sheetID,sh.hp,sh.name,sh.level,sh.speed,sh.class,sh.species,sh.armor, st.id as statsID,st.strength,st.dexterity,st.constitution,st.intelligence,st.wisdom,st.charisma FROM sheets sh join stats st on sh.stats_id=st.id where st.id='${id_stats}' 
     `)).rows
 
   res.send(completeSheet)
@@ -54,7 +54,7 @@ app.post('/sheets', async (req, res) => { // creating our endpoint
 })
 
 //get = read only mode, only send the answer
-app.get('/sheets/:id', async (req, res) => {//sheets/:id express understand that everything that comes
+app.get('/api/sheets/:id', async (req, res) => {//sheets/:id express understand that everything that comes
   //after the / is an id, so its like an variable.
   //async is necessary because we'll use await ()
   //await says to the computer "dont focus on me, i'll take time to get ready" so wait, before sending anything
@@ -62,7 +62,11 @@ app.get('/sheets/:id', async (req, res) => {//sheets/:id express understand that
   const myId = req.params.id//catch the id that is on the url
 
   //express puts any value that the user wrote on url in an object called req.params
-  const result = await client.query(`select * from public.sheets sh join public.stats st on sh.stats_id=st.id where sh.id = '${myId}'`)
+  const result = await client.query(`
+    select sh.id as sheetID,sh.hp,sh.name,sh.level,sh.speed,sh.class,sh.species,sh.armor, st.id as statsID,st.strength,st.dexterity,st.constitution,st.intelligence,st.wisdom,st.charisma from public.sheets sh join public.stats st on sh.stats_id=st.id where sh.id = '${myId}'`)
+  //we had a trouble because ID and statsID had the same name, so one was overwritting the value of the other
+  //because of it, we had to "change" the column name locally.
+
   //await stops the code on this line untill the db receives the command
 
   res.send(result.rows)
@@ -74,5 +78,6 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })  
 
+app.use('/',express.static('../front-end/')) //serve static files on the localhost
 
 //filtrar as fichas, ordenar as fichas, adicionar nova ficha, remover ficha, alterar uma ficha, buscar uma ficha por id CRUD 

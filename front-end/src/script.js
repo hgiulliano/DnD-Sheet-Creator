@@ -11,6 +11,26 @@ const inputSpeed = document.getElementById('charSpeed')
 
 //acessing our button so we can define its function
 const buttonConfirm = document.getElementById('buttonConfirm')
+const searchToolButton = document.getElementById('searchTool')
+const classCreate = document.getElementsByClassName('create')
+const classSearch = document.getElementsByClassName('search')
+const inputSearch = document.getElementById('inputSearch')
+
+searchToolButton.onclick = () => {
+    classCreate[0].classList.add('hidden')
+    classSearch[0].classList.remove('hidden')
+}
+
+const createToolButton = document.getElementById('createTool')
+createToolButton.onclick = () => {
+    classCreate[0].classList.remove('hidden')
+    classSearch[0].classList.add('hidden')
+}
+
+const searchButton = document.getElementById('searchChar')
+searchButton.onclick = () => {
+    window.location.href=`pages/sheet.html?id=${inputSearch.value}&save=true`//if you click the button you i'll be redirected to another page sheet.html
+}
 
 buttonConfirm.addEventListener('click', function () {
     const name = inputName.value
@@ -34,7 +54,7 @@ buttonConfirm.addEventListener('click', function () {
     const sheetToJson = JSON.stringify(newSheet) //transformed my object into a json string
 
     //Connect our front-end to our back-end
-    fetch("http://localhost:3000/sheets", {
+    fetch("http://localhost:3000/api/sheets", {
         method: "POST",
         headers: {
             "Content-Type": "application/json", //declare the body as json
@@ -42,13 +62,8 @@ buttonConfirm.addEventListener('click', function () {
         body: sheetToJson,
 
     }).then((response) => response.json()).then((response) => {
+        console.log(response)
         localStorage.setItem("charSheet",JSON.stringify(response)) //can access when the back-end sends something back
-    })
-
-    // //SENDING OBJECTS TO ANOTHER JS FILE 
-    localStorage.setItem("charSheetFe",sheetToJson)//sent my object with his "id" charSheet to the localStorage
-    // //so i can access it now on my other js file.
-
-    alert(`The sheet of the character ${name} was created. Redirecting to the sheet page.`)
-    window.location.href="pages/sheet.html"//if you click the button you i'll be redirected to another page sheet.html
+        window.location.href=`pages/sheet.html?id=${response[0].sheetid}&save=true`//if you click the button you i'll be redirected to another page sheet.html
+    })    
 })

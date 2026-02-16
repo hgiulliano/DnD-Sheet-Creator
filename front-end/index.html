@@ -10,63 +10,74 @@
 </head>
 
 <body>
+    
     <div class="central">
         <header class="header">
             <h1>D&D Sheets Maker</h1>
-            <p class="lead">Create your characters sheets here:</p>
+            <button id="createTool">Create Tool</button>
+            <button id="searchTool">Search Tool</button>
         </header>
-
-        <div class="charName">
-            <label for="charName">Character Name : </label>
-            <input type="text" id='charName'>
+        
+        <div class="search hidden" >
+            <input type="text" placeholder="Character ID here." id="inputSearch">
+            <button id="searchChar"> Search </button>
         </div>
         
-        <div class="charSpecies">
-            <label for="charSpecies">Choose your character specie:</label>
-            <select name="Specie" id="charSpecie">
-                <option value="Human">Human</option>
-                <option value="Elf">Elf</option>
-                <option value="Dwarf">Dwarf</option>
-                <option value="Drow">Drow</option>
-            </select>
+        <div class="create">
+            <p class="lead">Create your characters sheets here:</p>
+            <div class="charName">
+                <label for="charName">Character Name : </label>
+                <input type="text" id='charName'>
+            </div>
+            
+            <div class="charSpecies">
+                <label for="charSpecies">Choose your character specie:</label>
+                <select name="Specie" id="charSpecie">
+                    <option value="Human">Human</option>
+                    <option value="Elf">Elf</option>
+                    <option value="Dwarf">Dwarf</option>
+                    <option value="Drow">Drow</option>
+                </select>
+            </div>
+            
+            <div class="charClass">
+                <label for="charClass">Choose your class:</label>
+                <select name="Class" id="charClass">
+                    <option value="Warrior">Warrior</option>
+                    <option value="Rogue">Rogue</option>
+                    <option value="Wizard">Wizard</option>
+                    <option value="Sorcerer">Sorcerer</option>
+                    <option value="Warlock">Warlock</option>
+                    <option value="Druid">Druid</option>
+                </select>
+            </div>
+            
+            <div class="charLevel">
+                <label for="charLevel">Level : </label>
+                <input type="number" id="charLevel">
+            </div>
+            
+            <div class="charAc">
+                <label for="charAc">Armor Class : </label>
+                <input type="number" id="charAc">
+            </div>
+            
+            <div class="charHp">
+                <label for="charHp">Hit Points : </label>
+                <input type="number" id="charHp">
+            </div>
+            
+            <div class="charSpeed">
+                <label for="charSpeed">Speed : </label>
+                <input type="number" id="charSpeed">
+            </div>
+            
+            
+            <div class="confirmButton">
+                <button type="button" id="buttonConfirm">Confirm</button>
+            </div>
         </div>
 
-        <div class="charClass">
-            <label for="charClass">Choose your class:</label>
-            <select name="Class" id="charClass">
-                <option value="Warrior">Warrior</option>
-                <option value="Rogue">Rogue</option>
-                <option value="Wizard">Wizard</option>
-                <option value="Sorcerer">Sorcerer</option>
-                <option value="Warlock">Warlock</option>
-                <option value="Druid">Druid</option>
-            </select>
-        </div>
-
-        <div class="charLevel">
-            <label for="charLevel">Level : </label>
-            <input type="number" id="charLevel">
-        </div>
-
-        <div class="charAc">
-            <label for="charAc">Armor Class : </label>
-            <input type="number" id="charAc">
-        </div>
-
-        <div class="charHp">
-            <label for="charHp">Hit Points : </label>
-            <input type="number" id="charHp">
-        </div>
-
-        <div class="charSpeed">
-            <label for="charSpeed">Speed : </label>
-            <input type="number" id="charSpeed">
-        </div>
-
-
-        <div class="confirmButton">
-            <button type="button" id="buttonConfirm">Confirm</button>
-        </div>
         <script src="src/script.js"></script>
     </div>
 </body>

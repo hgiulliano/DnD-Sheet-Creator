@@ -16,7 +16,7 @@ body {
 
 .central {
     display: flex;
-    opacity: 70%;
+    opacity: 90%;
     flex-direction: column;
     align-items: center;
     width: 500px;
@@ -36,4 +36,13 @@ body {
 .sheet {
     text-align: right;
     text-transform: capitalize;
+}
+
+table, th, td {
+  border: 3px solid #eee; /* Sets the border for the table and its cells */
+  border-collapse: collapse; /* Makes borders collapse into a single line */
+}
+th, td {
+    padding: 5px;
+    text-align: center;
 }
