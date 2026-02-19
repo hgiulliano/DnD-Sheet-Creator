@@ -12,16 +12,22 @@ const inputSpeed = document.getElementById('charSpeed')
 //acessing our button so we can define its function
 const buttonConfirm = document.getElementById('buttonConfirm')
 const searchToolButton = document.getElementById('searchTool')
+const createToolButton = document.getElementById('createTool')
+const charListButton = document.getElementById("charactersList")
+
 const classCreate = document.getElementsByClassName('create')
 const classSearch = document.getElementsByClassName('search')
 const inputSearch = document.getElementById('inputSearch')
+
+charListButton.onclick = () => {
+    window.location.href ='pages/shlist.html'
+}
 
 searchToolButton.onclick = () => {
     classCreate[0].classList.add('hidden')
     classSearch[0].classList.remove('hidden')
 }
 
-const createToolButton = document.getElementById('createTool')
 createToolButton.onclick = () => {
     classCreate[0].classList.remove('hidden')
     classSearch[0].classList.add('hidden')

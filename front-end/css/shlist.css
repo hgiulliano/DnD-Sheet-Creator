@@ -1,3 +1,8 @@
+#container1 {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: auto auto auto
+}
 body {
     background-image: url(https://assetsio.gnwcdn.com/new-dnd-5e-starter-set-artwork.png?width=690&quality=85&format=jpg&dpr=3&auto=webp);
     background-size: cover;
@@ -22,22 +27,20 @@ body {
     text-align: center;
     width: auto;
     height: auto;
-    max-width: 500px;
     min-height: 200px;
     background-color: #2d2d2d;
     padding: 40px;
     color: #d4af37;
     border: 2px solid #d4af37;
-    border-radius: 5%;
+    border-radius: 8px;
     text-shadow:
     -1px -1px 0 #000,
      1px -1px 0 #000,
     -1px  1px 0 #000,
      1px  1px 0 #000;
 }
-
-.lead {
-    color: #e0e0e0;
+#id{
+    text-align: center;
 }
 h1 {
     margin: 0;
@@ -47,15 +50,6 @@ h1 {
      1px -1px 0 #000,
     -1px  1px 0 #000,
      1px  1px 0 #000;
-}
-.search {
-    margin-top: 20px;
-}
-.hidden {
-    display: none;
-}
-.create {
-    line-height: 1.8;
 }
 input {
     background-color: black;
@@ -78,7 +72,28 @@ button {
     -1px  1px 0 #d8d8d8,
      1px  1px 0 #d8d8d8;
 }
-button:hover {
-     background-color: #4a4a4a;
-     border-color: #4a4a4a;
+.round {
+    border-radius: 50%;
+}
+.nextPrevious{
+    margin-top: 20px;
+    margin-bottom: -20px;
+}
+.next {
+    background-color: #A8A9AD;
+}
+.next:hover {
+    background-color: #4a4a4a;
+    border-color: #4a4a4a;
+}
+.previous {
+    background-color: #A8A9AD;
+}
+.previous:hover {
+    background-color: #4a4a4a;
+    border-color: #4a4a4a;
+}
+.lead {
+    color: white;
+    font-size: large;
 }

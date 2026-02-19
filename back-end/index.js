@@ -14,13 +14,16 @@ client.connect() // connecting to the database
 const app = express() //initializing express
 const port = 3000 // listening on port 3000. We'll use it on the localhost
 
-app.use(cors("*"))//let everyone get access to our localhost, removing the security locks
+app.use(cors("*"))//let everyone send requests to our back-end.
 app.use(express.json()) // transforms the text to an json object, so we can access it's values
 
 
 //i've created an endpoint, so i can access it on my localhost:3000
 app.get('/api/sheets', async (req, res) => { 
-  const allSheets = await client.query(`select * from public.sheets`)
+  const allSheets = await client.query(`
+    select * from public.sheets order by name ASC
+    limit 10
+    `)
   res.send(allSheets.rows)
 })
 
