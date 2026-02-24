@@ -14,13 +14,19 @@ const buttonConfirm = document.getElementById('buttonConfirm')
 const searchToolButton = document.getElementById('searchTool')
 const createToolButton = document.getElementById('createTool')
 const charListButton = document.getElementById("charactersList")
+const deleteToolButton = document.getElementById("deleteTool")
+const updateToolButton = document.getElementById("updateTool")
 
 const classCreate = document.getElementsByClassName('create')
 const classSearch = document.getElementsByClassName('search')
 const inputSearch = document.getElementById('inputSearch')
 
+updateToolButton.onclick = () => {
+    window.location.href = 'pages/update.html'
+}
+
 charListButton.onclick = () => {
-    window.location.href ='pages/shlist.html'
+    window.location.href = 'pages/shlist.html'
 }
 
 searchToolButton.onclick = () => {
@@ -33,9 +39,13 @@ createToolButton.onclick = () => {
     classSearch[0].classList.add('hidden')
 }
 
+deleteToolButton.onclick = () => {
+    window.location.href = 'pages/delete.html'
+}
+
 const searchButton = document.getElementById('searchChar')
 searchButton.onclick = () => {
-    window.location.href=`pages/sheet.html?id=${inputSearch.value}&save=true`//if you click the button you i'll be redirected to another page sheet.html
+    window.location.href = `pages/sheet.html?id=${inputSearch.value}&save=true`//if you click the button you i'll be redirected to another page sheet.html
 }
 
 buttonConfirm.addEventListener('click', function () {
@@ -69,7 +79,7 @@ buttonConfirm.addEventListener('click', function () {
 
     }).then((response) => response.json()).then((response) => {
         console.log(response)
-        localStorage.setItem("charSheet",JSON.stringify(response)) //can access when the back-end sends something back
-        window.location.href=`pages/sheet.html?id=${response[0].sheetid}&save=true`//if you click the button you i'll be redirected to another page sheet.html
-    })    
+        localStorage.setItem("charSheet", JSON.stringify(response)) //can access when the back-end sends something back
+        window.location.href = `pages/sheet.html?id=${response[0].sheetid}&save=true`//if you click the button you i'll be redirected to another page sheet.html
+    })
 })

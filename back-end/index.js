@@ -1,13 +1,13 @@
 const express = require('express')//import express
 const cors = require('cors')//import cors
-const {Client} = require('pg')//from pg import client
+const { Client } = require('pg')//from pg import client
 
 const client = new Client({ //acessing our database, everything is on the docker compose
-    user:'cleric',
-    password:'cleric',
-    host:'localhost',
-    port:5432,
-    database:'postgres',
+  user: 'cleric',
+  password: 'cleric',
+  host: 'localhost',
+  port: 5432,
+  database: 'postgres',
 })
 
 client.connect() // connecting to the database
@@ -19,12 +19,21 @@ app.use(express.json()) // transforms the text to an json object, so we can acce
 
 
 //i've created an endpoint, so i can access it on my localhost:3000
-app.get('/api/sheets', async (req, res) => { 
+app.get('/api/sheets', async (req, res) => {
+  const offset = (req.query.page - 1) * req.query.limit
   const allSheets = await client.query(`
-    select * from public.sheets order by name ASC
-    limit 10
+    select * from public.sheets order by initcap(name) ASC
+    limit ${req.query.limit} offset ${offset}
     `)
-  res.send(allSheets.rows)
+  const characterCount = await client.query(`
+    select count(name)
+    from public.sheets
+    `)
+  const totalPages = Math.ceil((characterCount.rows[0].count) / req.query.limit)
+  res.send({
+    "items": allSheets.rows,
+    "totalPages": totalPages
+  })
 })
 
 //params goes on the url
@@ -35,25 +44,23 @@ app.post('/api/sheets', async (req, res) => { // creating our endpoint
   const id_stats = (await client.query(`
     INSERT INTO stats ("strength","dexterity","constitution","intelligence","wisdom","charisma")
     values (15,14,13,12,10,8) returning id`)).rows[0].id //sheets doesn't accept null values on the column stats_id, so we need to define our stats table values
-    //and catch the id that it returns, everytime we create a new stats sheet it generates a new id for us
+  //and catch the id that it returns, everytime we create a new stats sheet it generates a new id for us
+  const insertSheetValues = [req.body.name, req.body.charspecie, req.body.charclass, req.body.level, req.body.ac, req.body.hp, req.body.speed, id_stats]
+  //we do this to avoid sql injection.
 
-    const insertSheetValues = [req.body.name,req.body.charspecie,req.body.charclass,req.body.level,req.body.ac,req.body.hp,req.body.speed,id_stats]
-    //we do this to avoid sql injection.
-    
-    //in js we use query to insert things too.
-    
+  //in js we use query to insert things too.
+
   const returnSheet = await client.query(`
     INSERT INTO sheets ("name","species","class","level","armor","hp","speed","stats_id") 
     values ($1,$2,$3,$4,$5,$6,$7,$8) 
-    RETURNING *`,insertSheetValues); //we replace our $number with our variables on insertSheetValues.
-    //the $ avoids every special character so its impossible to sql injection.
+    RETURNING *`, insertSheetValues); //we replace our $number with our variables on insertSheetValues.
+  //the $ avoids every special character so its impossible to sql injection.
 
   const completeSheet = (await client.query(`
     SELECT sh.id as sheetID,sh.hp,sh.name,sh.level,sh.speed,sh.class,sh.species,sh.armor, st.id as statsID,st.strength,st.dexterity,st.constitution,st.intelligence,st.wisdom,st.charisma FROM sheets sh join stats st on sh.stats_id=st.id where st.id='${id_stats}' 
     `)).rows
 
   res.send(completeSheet)
-  console.log(`Sheets : ${JSON.stringify(completeSheet)}`)
 })
 
 //get = read only mode, only send the answer
@@ -61,7 +68,7 @@ app.get('/api/sheets/:id', async (req, res) => {//sheets/:id express understand 
   //after the / is an id, so its like an variable.
   //async is necessary because we'll use await ()
   //await says to the computer "dont focus on me, i'll take time to get ready" so wait, before sending anything
-  
+
   const myId = req.params.id//catch the id that is on the url
 
   //express puts any value that the user wrote on url in an object called req.params
@@ -76,11 +83,37 @@ app.get('/api/sheets/:id', async (req, res) => {//sheets/:id express understand 
   //rows is an list with the data that the user asked for
 })
 
+app.delete('/api/sheets/:statsid', async (req,res) => {
+  const statsId = req.params.statsid
+  client.query('DELETE FROM stats WHERE id = $1;',[statsId]) // cant use `${}` it crashes nodemon, and nee to use [var] into the $1
+  //if you dont use [] , it'll crash nodemon
+  res.send('Character deleted.')//if you dont send a res.send, the localhost will wait forever and return an error
+})
+
+app.patch('/api/sheets/:id', async (req,res) => {
+  const idPatch = req.params.id
+  console.log(req.body)
+  const updateQuery = await client.query(`
+    UPDATE sheets
+    SET
+      name = $1,
+      species = $2,
+      class = $3,
+      level = $4,
+      armor = $5,
+      speed = $6,
+      hp = $7
+    where
+      id = $8
+    `,[req.body.name,req.body.species,req.body.class,req.body.level,req.body.armor,req.body.speed,req.body.hp,idPatch])
+  res.send('test')
+})
+
 //opening the doors , now the server can receive requests, is like initializating the server.
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
-})  
+})
 
-app.use('/',express.static('../front-end/')) //serve static files on the localhost
+app.use('/', express.static('../front-end/')) //serve static files on the localhost
 
 //filtrar as fichas, ordenar as fichas, adicionar nova ficha, remover ficha, alterar uma ficha, buscar uma ficha por id CRUD 

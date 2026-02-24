@@ -1,21 +1,21 @@
 window.addEventListener('load', (event) => {
     const idChar = window.location.search.split('?id=')[1].split('&')[0]
-    fetch(`${window.location.origin}/api/sheets/${idChar}` ,{ // searches on the id char
+    fetch(`${window.location.origin}/api/sheets/${idChar}`, { // searches on the id char
         method: 'GET',
-        headers : {
-            'Content-Type':'application/json'
+        headers: {
+            'Content-Type': 'application/json'
         },
         //fetch returns a promisse, so we use then if the promisse is sucessful
     }).then((response) => response.json()).then((response) => {
         console.log(response)
-
+        document.title = `D&D Sheets | ${response[0].name}`
         if (response.class == `Wizard`) {
             document.body.style.backgroundImage = "url('https://images3.alphacoders.com/104/thumb-1920-1043020.jpg')"
         }
         else if (response.class == `Rogue`) {
             document.body.style.backgroundImage = "url('https://static0.polygonimages.com/wordpress/wp-content/uploads/2024/09/04-016.rogue-v-dragon.png?w=1600&h=900&fit=crop')"
         }
-        else if (response.class == `Warrior`){
+        else if (response.class == `Warrior`) {
             document.body.style.backgroundImage = "url('https://wallpapers.com/images/hd/human-eldritch-knight-of-dnd-t8lpzsjdmaxdv4vj.jpg')"
         }
 

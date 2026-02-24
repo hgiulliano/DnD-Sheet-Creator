@@ -1,0 +1,94 @@
+body {
+    background-image: url(https://assetsio.gnwcdn.com/new-dnd-5e-starter-set-artwork.png?width=690&quality=85&format=jpg&dpr=3&auto=webp);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+.central {
+    display: flex;
+    opacity: 90%;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: auto;
+    max-width: 500px;
+    background-color: #2d2d2d;
+    padding: 40px;
+    color: #d4af37;
+    border: 2px solid #d4af37;
+    border-radius: 5%;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.main-section {
+    width: 100%;
+    margin-top: 20px;
+}
+.lead{
+    color: white;
+}
+
+input {
+    background-color: black;
+    opacity: 80%;
+    border-radius: 5px;
+    color: white;
+}
+
+select {
+    background-color: black;
+    color: aliceblue;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #A8A9AD;
+    border-color: white;
+    border-radius: 5px;
+    text-shadow:
+        -1px -1px 0 #d8d8d8,
+        1px -1px 0 #d8d8d8,
+        -1px 1px 0 #d8d8d8,
+        1px 1px 0 #d8d8d8;
+}
+
+button:hover {
+    background-color: #4a4a4a;
+    border-color: #4a4a4a;
+}
+
+#deleteButton ,#deleteButton2{
+    border-style: solid;
+    border-width: 2px;
+    border-color: #000;
+    background-color: rgb(184, 10, 10);
+    text-shadow: #000;
+    
+    margin-top: 20px;
+    margin-bottom: 10px;
+
+    color: white;
+    font-size: medium
+
+}
+
+#deleteButton:hover ,#deleteButton2:hover{
+    scale: 1.05;
+    background-color: rgb(130, 7, 7);
+}
+
+.charInfo {
+    text-transform: capitalize;
+}
+.hidden{
+    visibility: hidden;
+}
