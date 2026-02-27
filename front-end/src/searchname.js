@@ -1,25 +1,37 @@
-var parameters = new URLSearchParams(window.location.search)//catch the url params values "a kind of slice"
-let currentPage = Number(parameters.get("page") ?? 1)
-let limit = parameters.get("limit") ?? 9 // ?? defines an default value
+// TODO: Refatorar os ifs das imagens por um objeto de mapeamento.
 
-async function fetchData(page, limit) {
-    try {
-        const responseNoJson = await fetch(`/api/sheets?page=${page}&limit=${limit}`, {//? and & to send things to the back end 
-            method: "GET",
-            headers: {
-                "Content-type": "application/json"
+async function fetchData(charName,currentPage,limit) {
+    try{
+       const response = await fetch((`http://localhost:3000/api/sheets/search/${charName}?page=${currentPage}&limit=${limit}`), {
+            method : "GET",
+            headers : {
+                "Content-Type" : "application/json"
             }
-        })
-        const response = await responseNoJson.json()
-        displaySheets(response)
+       }) 
+        const responsejson = await response.json()
+        displaySheets(responsejson)
     }
-    catch (error) {
-        console.error("Fetch failed", error);
+    catch(error){
+        console.log('Fetch failed : ',error)
+    }
+}
+
+const params = new URLSearchParams(window.location.search)
+const charName = params.get('name')
+const limit = Number(params.get('limit')) || 9
+var currentPage = Number(params.get('page')) || 1
+
+window.onload = async () => {
+    if(charName == null || charName == '' || charName == undefined){
+        alert('Please insert a character name')
+        window.location.href = `../index.html`
+    }
+    else{
+        await fetchData(charName,currentPage,limit)
     }
 }
 
 function displaySheets(response) {
-
     const ourDiv = document.getElementById("container1")
     const nextButton = document.getElementsByClassName("next")
     const prevButton = document.getElementsByClassName("previous")
@@ -37,7 +49,7 @@ function displaySheets(response) {
             nextButton[0].classList.add("hidden")
         }
 
-        fetchData(currentPage, limit) //we use fetch again to query the next page 
+        fetchData(charName,currentPage, limit) //we use fetch again to query the next page 
 
     }
     prevButton[0].onclick = () => {
@@ -49,11 +61,10 @@ function displaySheets(response) {
             nextButton[0].classList.remove("hidden")
         }
 
-        fetchData(currentPage, limit) // we use fetch 
+        fetchData(charName,currentPage, limit) 
     }
 
     for (let i = 0; i < response.items.length; i++) {
-        console.log(response.items[i].id)
         const centralDiv = document.createElement('div')
         const divPhoto = document.createElement('img')
         const infoText = document.createElement('span')
@@ -107,5 +118,3 @@ function displaySheets(response) {
     ourDiv.appendChild(pagesCounter)
 
 }
-
-fetchData(currentPage, limit)

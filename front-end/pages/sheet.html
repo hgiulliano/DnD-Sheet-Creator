@@ -14,7 +14,11 @@
     <div class="central">
         <header class="header">
             <h1>D&D Sheets Viewer</h1>
-            <p class="lead">Here's your sheet properties : </p>
+            <br>
+            <div class="lead">
+                <label for="editButton">Edit your character here :</label>
+                <button id="editButton">Edit character</button>
+            </div>
         </header>
 
         <div class="sheet">
@@ -22,6 +26,9 @@
             <table id="propsTable">
                 <thead>
                     <tr>
+                        <th>
+                            Class Photo
+                        </th>
                         <th>
                             name
                         </th>
@@ -47,7 +54,6 @@
                 </thead>
             </table>
         </div>
-
         <script src="../src/sheet.js"></script>
 </body>
 

@@ -23,7 +23,15 @@
         </header>
         
         <div class="search hidden" >
-            <input type="text" placeholder="Character ID here." id="inputSearch">
+            <p>Search by:</p>
+            <form id="radioForm">
+                <label for="radioId">ID</label>
+                <input type="radio" name="searchOptions" id="radioId" checked="checked">
+                <label for="radioName">Name</label>
+                <input type="radio" name="searchOptions" id="radioName">
+            </form>
+            <input type="text" placeholder="Character ID here." id="inputIdSearch">
+            <input type="text" placeholder="Character NAME here." id="inputNameSearch" class="hidden">
             <button id="searchChar"> Search </button>
         </div>
         

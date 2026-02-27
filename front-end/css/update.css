@@ -100,3 +100,6 @@ button:hover {
     display: block;
     margin-bottom: 20px;
 }
+#nextButton {
+    margin-bottom: 10px;
+}

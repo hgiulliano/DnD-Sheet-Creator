@@ -16,10 +16,17 @@ const createToolButton = document.getElementById('createTool')
 const charListButton = document.getElementById("charactersList")
 const deleteToolButton = document.getElementById("deleteTool")
 const updateToolButton = document.getElementById("updateTool")
+const searchButton = document.getElementById('searchChar')
 
 const classCreate = document.getElementsByClassName('create')
 const classSearch = document.getElementsByClassName('search')
-const inputSearch = document.getElementById('inputSearch')
+const inputIdSearch = document.getElementById('inputIdSearch')
+const inputNameSearch = document.getElementById('inputNameSearch')
+
+const radioForm = document.getElementById('radioForm')
+const radioName = document.getElementById('radioName')
+const radioId= document.getElementById('radioId')
+
 
 updateToolButton.onclick = () => {
     window.location.href = 'pages/update.html'
@@ -43,10 +50,23 @@ deleteToolButton.onclick = () => {
     window.location.href = 'pages/delete.html'
 }
 
-const searchButton = document.getElementById('searchChar')
-searchButton.onclick = () => {
-    window.location.href = `pages/sheet.html?id=${inputSearch.value}&save=true`//if you click the button you i'll be redirected to another page sheet.html
-}
+radioForm.addEventListener("change", () => {
+    if (radioId.checked){
+        inputIdSearch.classList.remove('hidden')
+        inputNameSearch.classList.add('hidden')
+        searchButton.onclick = () => {
+            window.location.href = `pages/sheet.html?id=${inputIdSearch.value}&save=true`//if you click the button you i'll be redirected to another page sheet.html
+        }
+    }
+    else if (radioName.checked){
+        inputIdSearch.classList.add('hidden')
+        inputNameSearch.classList.remove('hidden')
+        searchButton.onclick = () => {
+            window.location.href = `pages/searchname.html?name=${inputNameSearch.value}&page=${1}&limit=${9}`
+        }
+    }
+})
+    
 
 buttonConfirm.addEventListener('click', function () {
     const name = inputName.value
@@ -76,7 +96,7 @@ buttonConfirm.addEventListener('click', function () {
             "Content-Type": "application/json", //declare the body as json
         },
         body: sheetToJson,
-
+        
     }).then((response) => response.json()).then((response) => {
         console.log(response)
         localStorage.setItem("charSheet", JSON.stringify(response)) //can access when the back-end sends something back

@@ -83,6 +83,21 @@ app.get('/api/sheets/:id', async (req, res) => {//sheets/:id express understand 
   //rows is an list with the data that the user asked for
 })
 
+app.get('/api/sheets/search/:name',async (req,res) => {
+  const charName = `${req.params.name}%`
+  const actualLimit = Number(req.query.limit)
+  const actualOffset = Number((req.query.page-1)*req.query.limit)
+  const totalCharsArrays = await client.query(`select count(name) from sheets where name ilike $1`,[charName])
+  const totalChars = totalCharsArrays.rows[0].count
+  const nameSearch = await client.query(`
+    select * from sheets where name ilike $1 limit $2 offset $3;`,[charName,actualLimit,actualOffset])
+  const totalPages = Math.ceil(Number(totalChars)/actualLimit)
+  res.send({  
+    "items" : nameSearch.rows,
+    "totalPages" : totalPages
+  })
+})
+
 app.delete('/api/sheets/:statsid', async (req,res) => {
   const statsId = req.params.statsid
   client.query('DELETE FROM stats WHERE id = $1;',[statsId]) // cant use `${}` it crashes nodemon, and nee to use [var] into the $1

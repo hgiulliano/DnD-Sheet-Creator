@@ -28,6 +28,10 @@ async function updateFetch(url,stringBody) {
     }
 }
 
+const parameters = new URLSearchParams(window.location.search)
+const paramsId = parameters.get('id')
+console.log(paramsId)
+
 //create another fetch function (patch)
 
 const inputId = document.getElementById('charID')
@@ -40,6 +44,26 @@ nextButton.onclick = async () => {
     const charID = inputId.value
     const response = await getFetch(`http://localhost:3000/api/sheets/${charID}`)
     try{
+
+         if (response[0].class == `wizard`) {
+            document.body.style.backgroundImage = "url('https://images3.alphacoders.com/104/thumb-1920-1043020.jpg')"
+        }
+        else if (response[0].class == `rogue`) {
+            document.body.style.backgroundImage = "url('https://static0.polygonimages.com/wordpress/wp-content/uploads/2024/09/04-016.rogue-v-dragon.png?w=1600&h=900&fit=crop')"
+        }
+        else if (response[0].class == `warrior`) {
+            document.body.style.backgroundImage = "url('https://wallpapers.com/images/hd/human-eldritch-knight-of-dnd-t8lpzsjdmaxdv4vj.jpg')"
+        }
+        else if (response[0].class == `druid`) {
+            document.body.style.backgroundImage = "url('https://images8.alphacoders.com/102/1022769.jpg')"
+        }
+        else if (response[0].class == `sorcerer`) {
+            document.body.style.backgroundImage = "url('https://www.themarysue.com/wp-content/uploads/2023/06/sorceror.jpg?fit=1920%2C1080')"
+        }
+        else if (response[0].class == `warlock`) {
+            document.body.style.backgroundImage = "url('https://assetsio.gnwcdn.com/0-dungeons-and-dragons-warlock-5e-guide.png?width=1600&height=900&fit=crop&quality=100&format=png&enable=upscale&auto=webp')"
+        }
+
         charInfosMessage[0].innerHTML = `Here's your character stats, you can edit the properties that you want!`
         charInfos.innerHTML = `
         <label for="charName">Name:
@@ -95,12 +119,8 @@ nextButton.onclick = async () => {
         const newSpeed = document.getElementById('charSpeed')
         const newAc = document.getElementById('charAc')
 
-        nextButton.classList.add('hidden')
-
         const sendUpdate = document.getElementById('sendUpdate')
         sendUpdate.classList.remove('hidden')
-        console.log(response[0])
-        console.log(response[0].id)
         sendUpdate.onclick = async () => {
             const newValues = {
                 "name": newName.value,
@@ -121,4 +141,9 @@ nextButton.onclick = async () => {
     catch(error){
         alert('Please enter a valid character ID',error)
     }
+}
+
+if (paramsId != null){
+    inputId.value = paramsId    
+    nextButton.click()
 }
