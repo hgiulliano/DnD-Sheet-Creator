@@ -27,6 +27,9 @@ async function deleteFetch(url) {
     }
 }
 
+const parameters = new URLSearchParams(window.location.search)
+const paramsID = parameters.get('id')
+
 const deleteButton = document.getElementById('deleteButton')
 const deleteButton2 = document.getElementById('deleteButton2')
 const charInfo = document.getElementsByClassName('charInfo')
@@ -54,4 +57,8 @@ deleteButton.onclick = async () => {
         alert('Character deleted. Refreshing the page.')
         window.location.reload()
     }
+}
+if (paramsID!=null){
+    inputId.value = paramsID
+    deleteButton.click()
 }

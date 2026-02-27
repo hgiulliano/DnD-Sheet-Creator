@@ -28,6 +28,15 @@ function displaySheets(response) {
     pagesCounter.classList.add('counter')
     pagesCounter.innerHTML = `${currentPage}/${response.totalPages}`
 
+    const classImage = {
+        warrior: "../assets/warrior.png",        
+        warlock: "../assets/warlock.jpg",        
+        rogue:  "../assets/rogue.png",        
+        sorcerer: "../assets/sorcerer.png",
+        druid: "../assets/druid.png",        
+        wizard: "../assets/wizard.png"
+    }
+
     nextButton[0].onclick = () => {
         currentPage += 1
         ourDiv.innerHTML = ''
@@ -68,30 +77,9 @@ function displaySheets(response) {
             }, 20)
             window.location.href = `${window.location.origin}/pages/sheet.html?id=${response.items[i].id}&save=true`
         })
+        
+        divPhoto.src = classImage[response.items[i].class]
 
-        //defining the image by the class
-        if (response.items[i].class == "warrior") {
-            divPhoto.src = "../assets/warrior.png"
-        }
-        else if (response.items[i].class == "warlock") {
-            divPhoto.src = "../assets/warlock.jpg"
-        }
-        else if (response.items[i].class == "rogue") {
-            divPhoto.src = "../assets/rogue.png"
-        }
-        else if (response.items[i].class == "sorcerer") {
-            divPhoto.src = "../assets/sorcerer.png"
-        }
-        else if (response.items[i].class == "druid") {
-            divPhoto.src = "../assets/druid.png"
-        }
-        else if (response.items[i].class == "wizard") {
-            divPhoto.src = "../assets/wizard.png"
-        }
-        else {
-            alert("The character class is undefined")
-        }
-    
         infoText.innerHTML = `
         <br>
         ${response.items[i].name}<br>
