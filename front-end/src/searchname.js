@@ -1,5 +1,3 @@
-// TODO: Refatorar os ifs das imagens por um objeto de mapeamento.
-
 async function fetchData(charName,currentPage,limit) {
     try{
        const response = await fetch((`http://localhost:3000/api/sheets/search/${charName}?page=${currentPage}&limit=${limit}`), {
@@ -31,6 +29,7 @@ window.onload = async () => {
     }
 }
 
+
 const classImage = {
     warrior: "../assets/warrior.png",        
     warlock: "../assets/warlock.jpg",        
@@ -41,69 +40,76 @@ const classImage = {
 }
 
 function displaySheets(response) {
-    const ourDiv = document.getElementById("container1")
-    const nextButton = document.getElementsByClassName("next")
-    const prevButton = document.getElementsByClassName("previous")
-    const pagesCounter = document.createElement('span')
-
-    pagesCounter.classList.add('counter')
-    pagesCounter.innerHTML = `${currentPage}/${response.totalPages}`
-
-
-    nextButton[0].onclick = () => {
-        currentPage += 1
-        ourDiv.innerHTML = ''
-        if (currentPage > 1)
-            prevButton[0].classList.remove("hidden")
-        if (currentPage == response.totalPages) {
-            nextButton[0].classList.add("hidden")
-        }
-
-        fetchData(charName,currentPage, limit) //we use fetch again to query the next page 
-
+    if (response.items.length == 0){
+        window.alert(`The value ${charName} doesn't match to any character in the database`)
+        window.location.href = `../index.html`
     }
-    prevButton[0].onclick = () => {
-        currentPage -= 1
-        ourDiv.innerHTML = ''
-        if (currentPage == 1)
-            prevButton[0].classList.add("hidden")
-        if (currentPage == (response.totalPages - 1)) {
-            nextButton[0].classList.remove("hidden")
-        }
+    else {
 
-        fetchData(charName,currentPage, limit) 
-    }
-
-    for (let i = 0; i < response.items.length; i++) {
-        const centralDiv = document.createElement('div')
-        const divPhoto = document.createElement('img')
-        const infoText = document.createElement('span')
+        const ourDiv = document.getElementById("container1")
+        const nextButton = document.getElementsByClassName("next")
+        const prevButton = document.getElementsByClassName("previous")
+        const pagesCounter = document.createElement('span')
         
-        centralDiv.classList.add('container1')
-        divPhoto.classList.add('divPhoto')
-
-        centralDiv.addEventListener("click", () => {
-            centralDiv.classList.add("click-animation")
-            setTimeout(() => {
-                centralDiv.classList.remove("click-animation")
-            }, 20)
-            window.location.href = `${window.location.origin}/pages/sheet.html?id=${response.items[i].id}&save=true`
-        })
-
-        divPhoto.src = classImage[response.items[i].class]
-
-        infoText.innerHTML = `
-        <br>
-        ${response.items[i].name}<br>
-        ${response.items[i].species} | ${response.items[i].class}<br>
-        HP : ${response.items[i].hp} | AC : ${response.items[i].armor}
-        `
-
-        centralDiv.appendChild(divPhoto)
-        centralDiv.appendChild(infoText)
-        ourDiv.appendChild(centralDiv)
+        pagesCounter.classList.add('counter')
+        pagesCounter.innerHTML = `${currentPage}/${response.totalPages}`
+        
+        
+        nextButton[0].onclick = () => {
+            currentPage += 1
+            ourDiv.innerHTML = ''
+            if (currentPage > 1)
+                prevButton[0].classList.remove("hidden")
+            if (currentPage == response.totalPages) {
+                nextButton[0].classList.add("hidden")
+            }
+            window.history.pushState({},"",`?name=${charName}&page=${currentPage}&limit=${limit}`)
+            fetchData(charName,currentPage, limit) //we use fetch again to query the next page 
+            
+        }
+        prevButton[0].onclick = () => {
+            currentPage -= 1
+            ourDiv.innerHTML = ''
+            if (currentPage == 1)
+                prevButton[0].classList.add("hidden")
+            if (currentPage == (response.totalPages - 1)) {
+                nextButton[0].classList.remove("hidden")
+            }
+            window.history.pushState({},"",`?name=${charName}&page=${currentPage}&limit=${limit}`)
+            fetchData(charName,currentPage, limit) 
+        }
+        
+        for (let i = 0; i < response.items.length; i++) {
+            const centralDiv = document.createElement('div')
+            const divPhoto = document.createElement('img')
+            const infoText = document.createElement('span')
+            
+            centralDiv.classList.add('container1')
+            divPhoto.classList.add('divPhoto')
+            
+            centralDiv.addEventListener("click", () => {
+                centralDiv.classList.add("click-animation")
+                setTimeout(() => {
+                    centralDiv.classList.remove("click-animation")
+                }, 20)
+                window.location.href = `${window.location.origin}/pages/sheet.html?id=${response.items[i].id}&save=true`
+            })
+            
+            divPhoto.src = classImage[response.items[i].class]
+            
+            infoText.innerHTML = `
+            <br>
+            ${response.items[i].name}<br>
+            ${response.items[i].species} | ${response.items[i].class}<br>
+            HP : ${response.items[i].hp} | AC : ${response.items[i].armor}
+            `
+            
+            centralDiv.appendChild(divPhoto)
+            centralDiv.appendChild(infoText)
+            ourDiv.appendChild(centralDiv)
+        }
+        
+        ourDiv.appendChild(pagesCounter)
+        
     }
-
-    ourDiv.appendChild(pagesCounter)
-
 }

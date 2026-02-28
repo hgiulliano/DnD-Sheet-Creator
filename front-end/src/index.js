@@ -33,7 +33,7 @@ updateToolButton.onclick = () => {
 }
 
 charListButton.onclick = () => {
-    window.location.href = 'pages/shlist.html'
+    window.location.href = 'pages/shlist.html?page=1&limit=9'
 }
 
 searchToolButton.onclick = () => {
@@ -50,23 +50,26 @@ deleteToolButton.onclick = () => {
     window.location.href = 'pages/delete.html'
 }
 
+
 radioForm.addEventListener("change", () => {
     if (radioId.checked){
         inputIdSearch.classList.remove('hidden')
         inputNameSearch.classList.add('hidden')
-        searchButton.onclick = () => {
-            window.location.href = `pages/sheet.html?id=${inputIdSearch.value}&save=true`//if you click the button you i'll be redirected to another page sheet.html
-        }
     }
     else if (radioName.checked){
         inputIdSearch.classList.add('hidden')
         inputNameSearch.classList.remove('hidden')
-        searchButton.onclick = () => {
-            window.location.href = `pages/searchname.html?name=${inputNameSearch.value}&page=${1}&limit=${9}`
-        }
     }
 })
-    
+
+searchButton.onclick = () => {
+    if (radioId.checked) {
+        window.location.href = `pages/sheet.html?id=${inputIdSearch.value}&save=true`//if you click the button you i'll be redirected to another page sheet.html
+    }
+    else {
+        window.location.href = `pages/searchname.html?name=${inputNameSearch.value}&page=${1}&limit=${9}`
+    }
+}
 
 buttonConfirm.addEventListener('click', function () {
     const name = inputName.value

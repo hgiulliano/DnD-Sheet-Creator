@@ -1,22 +1,41 @@
+function charNotFoundError() {
+    alert('Character Not Found - 404')
+    window.location.href = '../index.html'
+}
+
 window.addEventListener('load', (event) => {
-    const idChar = window.location.search.split('?id=')[1].split('&')[0]
-    fetch(`${window.location.origin}/api/sheets/${idChar}`, { // searches on the id char
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        //fetch returns a promisse, so we use then if the promisse is sucessful
-    }).then((response) => response.json()).then((response) => {
-        console.log(response)
+    const parameters = new URLSearchParams(window.location.search)
+    const idChar = parameters.get('id')
+
+    if (idChar == null || idChar.length!=36){
+            charNotFoundError()
+            return; //finish the code here
+        }
+
+    else{
+
+        fetch(`${window.location.origin}/api/sheets/${idChar}`, { // searches on the id char
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            //fetch returns a promisse, so we use then if the promisse is sucessful
+        }).then((response) => response.json()).then((response) => {
+        
+        if (response.length == 0 || response[0] == null || response[0] == undefined){
+            //first we check if the array have something inside of it, if it has, then we check the values in it 
+            charNotFoundError()
+            return; //finish the code here
+        }
+
         document.title = `D&D Sheets | ${response[0].name}`
-            
+        
         const propsTable = document.getElementById('propsTable')
         const charPhoto = document.createElement('img')
         const editButton = document.getElementById('editButton')
         const deleteButton = document.getElementById('deleteButton')
         
         charPhoto.classList.add('image')
-
         
         const classImage = {
             warrior: "../assets/warrior.png",        
@@ -28,7 +47,7 @@ window.addEventListener('load', (event) => {
         }
 
         charPhoto.src = classImage[response[0].class]
-
+        
         const row = propsTable.insertRow(1)
         var photoRow = row.insertCell(0)
         var nameRow = row.insertCell(1)
@@ -48,17 +67,12 @@ window.addEventListener('load', (event) => {
         acRow.innerHTML = response[0].armor
         speedRow.innerHTML = response[0].speed
         
-        
         editButton.onclick = () => {
             window.location.href=`../pages/update.html?id=${response[0].sheetid}`
         }
         deleteButton.onclick = () => {
             window.location.href=`../pages/delete.html?id=${response[0].sheetid}`
         }
-    })
-
+    })   
+    }
 })
-
-// charName.innerHTML = sheet.name
-// charProps.innerHTML = `${sheet.charclass} | ${sheet.charspecie} | Level: ${sheet.level} <br>
-//  Hit Points : ${sheet.hp} | Armor Class : ${sheet.ac} | Speed : ${sheet.speed}ft`

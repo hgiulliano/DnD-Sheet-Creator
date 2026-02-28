@@ -45,7 +45,7 @@ function displaySheets(response) {
         if (currentPage == response.totalPages) {
             nextButton[0].classList.add("hidden")
         }
-
+        window.history.pushState({},"",`http://localhost:3000/pages/shlist.html?page=${currentPage}&limit=${limit}`)
         fetchData(currentPage, limit) //we use fetch again to query the next page 
 
     }
@@ -57,7 +57,7 @@ function displaySheets(response) {
         if (currentPage == (response.totalPages - 1)) {
             nextButton[0].classList.remove("hidden")
         }
-
+        window.history.pushState({},"",`http://localhost:3000/pages/shlist.html?page=${currentPage}&limit=${limit}`)
         fetchData(currentPage, limit) // we use fetch 
     }
 
