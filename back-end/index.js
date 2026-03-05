@@ -1,12 +1,17 @@
+function isUUIDInvalid(id){
+  const uuidModel = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
+  return !uuidModel.test(id)
+}//here we test if our uuid is a valid id
+
 const express = require('express')//import express
 const cors = require('cors')//import cors
 const { Client } = require('pg')//from pg import client
 
 const client = new Client({ //acessing our database, everything is on the docker compose
   user: 'cleric',
-  password: 'cleric',
+  password: 'Cajado@2026!Mestre',
   host: 'localhost',
-  port: 5432,
+  port: 5433,
   database: 'postgres',
 })
 
@@ -23,8 +28,8 @@ app.get('/api/sheets', async (req, res) => {
   const offset = (req.query.page - 1) * req.query.limit
   const allSheets = await client.query(`
     select * from public.sheets order by initcap(name) ASC
-    limit ${req.query.limit} offset ${offset}
-    `)
+    limit $1 offset $2
+    `,[req.query.limit,offset])
   const characterCount = await client.query(`
     select count(name)
     from public.sheets
@@ -68,16 +73,27 @@ app.get('/api/sheets/:id', async (req, res) => {//sheets/:id express understand 
   //after the / is an id, so its like an variable.
   //async is necessary because we'll use await ()
   //await says to the computer "dont focus on me, i'll take time to get ready" so wait, before sending anything
-
   const myId = req.params.id//catch the id that is on the url
+
+
+  if (isUUIDInvalid(myId)){
+    return res.status(400).send({
+      message : "Invalid Character ID"
+    });
+  }
 
   //express puts any value that the user wrote on url in an object called req.params
   const result = await client.query(`
-    select sh.id as sheetID,sh.hp,sh.name,sh.level,sh.speed,sh.class,sh.species,sh.armor, st.id as statsID,st.strength,st.dexterity,st.constitution,st.intelligence,st.wisdom,st.charisma from public.sheets sh join public.stats st on sh.stats_id=st.id where sh.id = '${myId}'`)
+    select sh.id as sheetID,sh.hp,sh.name,sh.level,sh.speed,sh.class,sh.species,sh.armor, st.id as statsID,st.strength,st.dexterity,st.constitution,st.intelligence,st.wisdom,st.charisma from public.sheets sh join public.stats st on sh.stats_id=st.id where sh.id = $1`,[myId])
   //we had a trouble because ID and statsID had the same name, so one was overwritting the value of the other
   //because of it, we had to "change" the column name locally.
-
   //await stops the code on this line untill the db receives the command
+
+    if (result.rows.length == 0){
+      return res.status(400).send({
+        message : "Invalid Character ID"
+      });
+    }
 
   res.send(result.rows)
   //rows is an list with the data that the user asked for
@@ -100,17 +116,28 @@ app.get('/api/sheets/search/:name',async (req,res) => {
 
 app.delete('/api/sheets/:statsid', async (req,res) => {
   const statsId = req.params.statsid
-  client.query('DELETE FROM stats WHERE id = $1;',[statsId]) // cant use `${}` it crashes nodemon, and nee to use [var] into the $1
+  if(isUUIDInvalid(statsId)){
+    return res.status(400).send({
+      message : "The character ID is invalid."
+    })
+  }
+
+  await client.query('DELETE FROM stats WHERE id = $1;',[statsId]) // cant use `${}` it crashes nodemon, and nee to use [var] into the $1
   //if you dont use [] , it'll crash nodemon
   res.send('Character deleted.')//if you dont send a res.send, the localhost will wait forever and return an error
 })
 
 app.patch('/api/sheets/:id', async (req,res) => {
   const idPatch = req.params.id
-  console.log(req.body)
-  const updateQuery = await client.query(`
-    UPDATE sheets
-    SET
+  if(isUUIDInvalid(idPatch)){
+    return res.status(400).send({ // res.status because is a bad request. 
+      message : "Your ID is not valid." 
+    })
+  
+  }
+    const updateQuery = await client.query(`
+      UPDATE sheets
+      SET
       name = $1,
       species = $2,
       class = $3,
@@ -118,11 +145,14 @@ app.patch('/api/sheets/:id', async (req,res) => {
       armor = $5,
       speed = $6,
       hp = $7
-    where
+      where
       id = $8
-    `,[req.body.name,req.body.species,req.body.class,req.body.level,req.body.armor,req.body.speed,req.body.hp,idPatch])
-  res.send('test')
-})
+      `,[req.body.name,req.body.species,req.body.class,req.body.level,req.body.armor,req.body.speed,req.body.hp,idPatch])
+    res.send({
+      message : "Character updated successfully.s"
+    })
+  }
+)
 
 //opening the doors , now the server can receive requests, is like initializating the server.
 app.listen(port, () => {

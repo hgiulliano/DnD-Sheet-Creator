@@ -1,3 +1,8 @@
+function isUUIDInvalid(id){
+  const uuidModel = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
+  return !uuidModel.test(id)
+}
+
 async function getFetch(url) {
     try{
         const response = await fetch((url),{
@@ -10,6 +15,7 @@ async function getFetch(url) {
     }
     catch(error){
         console.log('Fetch Failed,',error)
+        return []
     }
 }
 
@@ -22,15 +28,16 @@ async function updateFetch(url,stringBody) {
             },
             body : stringBody
         })
+        return response.json()
     }
     catch(error){
         console.log('Fetch failed',error)
+        return []
     }
 }
 
 const parameters = new URLSearchParams(window.location.search)
 const paramsId = parameters.get('id')
-console.log(paramsId)
 
 //create another fetch function (patch)
 
@@ -41,28 +48,34 @@ const charInfosMessage = document.getElementsByClassName('charInfosMessage')
 
 
 nextButton.onclick = async () => {
-    const charID = inputId.value
-    const response = await getFetch(`http://localhost:3000/api/sheets/${charID}`)
-    try{
+    const charID = inputId.value.trim()
+    console.log(charID)
 
-         if (response[0].class == `wizard`) {
-            document.body.style.backgroundImage = "url('https://images3.alphacoders.com/104/thumb-1920-1043020.jpg')"
+    if (isUUIDInvalid(charID)){ // it covers null and undefined
+        inputId.value = ""
+        alert('Character id is not valid.')
+        return
+    }
+
+    
+    const response = await getFetch(`http://localhost:3000/api/sheets/${charID}`)
+    if (response.length == 0 || response[0] == null|| response[0] == undefined){
+        inputId.value = ""
+        alert('Character id is not valid.')
+        return
+    }
+    try{
+    
+        const backgrounds = {
+            wizard : "https://images3.alphacoders.com/104/thumb-1920-1043020.jpg",
+            rogue : "https://static0.polygonimages.com/wordpress/wp-content/uploads/2024/09/04-016.rogue-v-dragon.png?w=1600&h=900&fit=crop",
+            warrior : "https://wallpapers.com/images/hd/human-eldritch-knight-of-dnd-t8lpzsjdmaxdv4vj.jpg",
+            druid : "https://images8.alphacoders.com/102/1022769.jpg",
+            sorcerer : "https://www.themarysue.com/wp-content/uploads/2023/06/sorceror.jpg?fit=1920%2C1080",
+            warlock : "https://assetsio.gnwcdn.com/0-dungeons-and-dragons-warlock-5e-guide.png?width=1600&height=900&fit=crop&quality=100&format=png&enable=upscale&auto=webp"
         }
-        else if (response[0].class == `rogue`) {
-            document.body.style.backgroundImage = "url('https://static0.polygonimages.com/wordpress/wp-content/uploads/2024/09/04-016.rogue-v-dragon.png?w=1600&h=900&fit=crop')"
-        }
-        else if (response[0].class == `warrior`) {
-            document.body.style.backgroundImage = "url('https://wallpapers.com/images/hd/human-eldritch-knight-of-dnd-t8lpzsjdmaxdv4vj.jpg')"
-        }
-        else if (response[0].class == `druid`) {
-            document.body.style.backgroundImage = "url('https://images8.alphacoders.com/102/1022769.jpg')"
-        }
-        else if (response[0].class == `sorcerer`) {
-            document.body.style.backgroundImage = "url('https://www.themarysue.com/wp-content/uploads/2023/06/sorceror.jpg?fit=1920%2C1080')"
-        }
-        else if (response[0].class == `warlock`) {
-            document.body.style.backgroundImage = "url('https://assetsio.gnwcdn.com/0-dungeons-and-dragons-warlock-5e-guide.png?width=1600&height=900&fit=crop&quality=100&format=png&enable=upscale&auto=webp')"
-        }
+
+        document.body.style.backgroundImage = `url('${backgrounds[response[0].class]}')`
 
         charInfosMessage[0].innerHTML = `Here's your character stats, you can edit the properties that you want!`
         charInfos.innerHTML = `
@@ -139,7 +152,6 @@ nextButton.onclick = async () => {
         // //create inputs catch the inputs values and send it by fetch patch and query them to the postgresdb
     }
     catch(error){
-        alert('Please enter a valid character ID',error)
     }
 }
 

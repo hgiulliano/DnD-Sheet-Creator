@@ -6,10 +6,10 @@ services:
     restart: always
     environment:
       POSTGRES_USER: cleric
-      POSTGRES_PASSWORD: cleric
+      POSTGRES_PASSWORD: Cajado@2026!Mestre
       POSTGRES_DB: characters
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
