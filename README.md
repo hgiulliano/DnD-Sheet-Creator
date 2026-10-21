@@ -12,17 +12,13 @@ A learning-focused project designed for players who need an **easy-to-use** and 
 
 ## 📸 Screenshots
 
-| Home / Create character | Characters list |
-|:---:|:---:|
-| ![Home](docs/screenshots/01-home.png) | ![List](docs/screenshots/03-list.png) |
+<p align="center">
+  <img src="docs/screenshots/01-home.png" alt="Home page" width="700">
+</p>
 
-| Character sheet | Search by name |
-|:---:|:---:|
-| ![Sheet](docs/screenshots/04-sheet.png) | ![Search](docs/screenshots/05-search.png) |
-
-| Edit character |
-|:---:|
-| ![Edit](docs/screenshots/06-edit.png) |
+| Characters list | Character sheet | Search by name |
+|:---:|:---:|:---:|
+| ![List](docs/screenshots/03-list.png) | ![Sheet](docs/screenshots/04-sheet.png) | ![Search](docs/screenshots/05-search.png) |
 
 ---
 
@@ -33,7 +29,7 @@ This project is **hand-coded**. While I use AI for consulting, documentation, an
 
 ## ⚔️ Features
 
-* **Create characters:** Ability scores, AC, HP, speed, level, class and species.
+* **Create characters:** Name, species, class, level, AC, HP and speed.
 * **Characters list:** Paginated list; click a character to open its sheet.
 * **Search:** Find a character by ID or by (partial) name.
 * **Edit & delete:** Update or remove any saved sheet.
@@ -146,9 +142,3 @@ To stop: `Ctrl + C` on the server, then `docker compose down` (add `-v` to also 
 ```
 
 ---
-
-## 🗺️ Roadmap
-
-- [ ] Move database credentials to a `.env` file
-- [ ] Editable ability scores (currently new characters start with a default array)
-- [ ] More classes and species
