@@ -10,7 +10,14 @@ A learning-focused project designed for players who need an **easy-to-use** and 
 
 ---
 
-## 📸 Screenshots
+## 📸 Screenshots---
+
+<div align="center">
+
+Feito por [@hgiulliano](https://github.com/hgiulliano)
+
+</div>
+
 
 <p align="center">
   <img src="docs/screenshots/01-home.png" alt="Home page" width="700">
@@ -151,6 +158,6 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 <div align="center">
 
-Feito por [@hgiulliano](https://github.com/hgiulliano)
+Made by [@hgiulliano](https://github.com/hgiulliano)
 
 </div>
