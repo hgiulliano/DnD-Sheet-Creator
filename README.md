@@ -146,3 +146,11 @@ To stop: `Ctrl + C` on the server, then `docker compose down` (add `-v` to also 
 ## 📄 License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+<div align="center">
+
+Feito por [@hgiulliano](https://github.com/hgiulliano)
+
+</div>
